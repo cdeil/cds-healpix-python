@@ -19,7 +19,7 @@ setup(
         binding=Binding.NoBinding)],
     packages=["cdshealpix"],
     install_requires=['cffi',
-        'numpy==1.15.4;platform_system=="Windows"',
+        'numpy == 1.15.4;platform_system=="Windows"',
         'astropy',
     ],
     # rust extensions are not zip safe, just like C-extensions.
