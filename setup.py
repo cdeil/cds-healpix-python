@@ -18,10 +18,7 @@ setup(
         # The binding with the Rust cdshealpix API is done using CFFI
         binding=Binding.NoBinding)],
     packages=["cdshealpix"],
-    install_requires=['cffi',
-        'numpy == 1.15.4;platform_system=="Windows"',
-        'astropy',
-    ],
+    install_requires=get_package_dependencies(),
     # rust extensions are not zip safe, just like C-extensions.
     zip_safe=False,
 )
