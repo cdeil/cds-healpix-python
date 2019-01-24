@@ -6,70 +6,15 @@ environment:
     CMD_IN_ENV: "cmd /E:ON /V:ON /C .\\appveyor\\run_with_env.cmd"
     TWINE_USERNAME: bmatthieu3
     CIBW_BEFORE_BUILD: pip install setuptools-rust
-  # Note: TWINE_PASSWORD is set in Appveyor settings
+    # Note: TWINE_PASSWORD is set in Appveyor settings
   matrix:
     # Nightly 64-bit MSVC
-    - channel: nightly
-      target: x86_64-pc-windows-msvc
-      PYTHON: "C:\\Python27-x64"
-      PYTHON_VERSION: "2.7.x"
-      PYTHON_ARCH: "64"
-      CIBW_SKIP: "*win32* cp33-* cp34-* cp35-* cp36-* cp37-*"
     - channel: nightly
       target: x86_64-pc-windows-msvc
       PYTHON: "C:\\Python34-x64"
       PYTHON_VERSION: "3.4.x"
       PYTHON_ARCH: "64"
       CIBW_SKIP: "*win32* cp27-* cp33-* cp35-* cp36-* cp37-*"
-    - channel: nightly
-      target: x86_64-pc-windows-msvc
-      PYTHON: "C:\\Python35-x64"
-      PYTHON_VERSION: "3.5.x"
-      PYTHON_ARCH: "64"
-      CIBW_SKIP: "*win32* cp27-* cp33-* cp34-* cp36-* cp37-*"
-    - channel: nightly
-      target: x86_64-pc-windows-msvc
-      PYTHON: "C:\\Python36-x64"
-      PYTHON_VERSION: "3.6.x"
-      PYTHON_ARCH: "64"
-      CIBW_SKIP: "*win32* cp27-* cp33-* cp34-* cp35-* cp37-*"
-    - channel: nightly
-      target: x86_64-pc-windows-msvc
-      PYTHON: "C:\\Python37-x64"
-      PYTHON_VERSION: "3.7.x"
-      PYTHON_ARCH: "64"
-      CIBW_SKIP: "*win32* cp27-* cp33-* cp34-* cp35-* cp36-*"
-    # Nightly 32-bit MSVC
-    - channel: nightly
-      target: i686-pc-windows-msvc
-      PYTHON: "C:\\Python27"
-      PYTHON_VERSION: "2.7.x"
-      PYTHON_ARCH: "32"
-      CIBW_SKIP: "*win_amd64* cp33-* cp34-* cp35-* cp36-* cp37-*"
-    - channel: nightly
-      target: i686-pc-windows-msvc
-      PYTHON: "C:\\Python34"
-      PYTHON_VERSION: "3.4.x"
-      PYTHON_ARCH: "32"
-      CIBW_SKIP: "*win_amd64* cp27-* cp33-* cp35-* cp36-* cp37-*"
-    - channel: nightly
-      target: i686-pc-windows-msvc
-      PYTHON: "C:\\Python35"
-      PYTHON_VERSION: "3.5.x"
-      PYTHON_ARCH: "32"
-      CIBW_SKIP: "*win_amd64* cp27-* cp33-* cp34-* cp36-* cp37-*"
-    - channel: nightly
-      target: i686-pc-windows-msvc
-      PYTHON: "C:\\Python36"
-      PYTHON_VERSION: "3.6.x"
-      PYTHON_ARCH: "32"
-      CIBW_SKIP: "*win_amd64* cp27-* cp33-* cp34-* cp35-* cp37-*"
-    - channel: nightly
-      target: i686-pc-windows-msvc
-      PYTHON: "C:\\Python37"
-      PYTHON_VERSION: "3.7.x"
-      PYTHON_ARCH: "32"
-      CIBW_SKIP: "*win_amd64* cp27-* cp33-* cp34-* cp35-* cp36-*"
 
 install:
   # Install cargo. See: https://github.com/starkat99/appveyor-rust/blob/master/appveyor.yml
@@ -85,8 +30,8 @@ install:
 build_script:
   # Install python dependencies for running compiling
   # the dynamic library and run the tests
-  - python -m pip install -r requirements.txt
-  - python -m pip install pytest setuptools-rust astropy_healpix
+  - pip install -r requirements.txt
+  - pip install pytest setuptools-rust astropy_healpix
   # Compile the dynamic library (.pyd on Windows env)
   - python setup.py build_rust
   # Copy the generated library to the python files location
