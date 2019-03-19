@@ -57,6 +57,29 @@ pub extern "C" fn hpx_hash_lonlat(
     }
 }
 
+#[no_mangle]
+pub extern "C" fn hpx_par_hash_lonlat(
+    depth: u8,
+    num_coords: u32,
+    lon: *const f64,
+    lat: *const f64,
+    ipixels: *mut u64,
+) {
+    let num_coords = num_coords as usize;
+
+    let lon = to_slice(lon, num_coords);
+    let lat = to_slice(lat, num_coords);
+
+    let res = to_slice_mut(ipixels, num_coords);
+
+    // To control the number of threads, put this in a dedicated method?
+    // rayon::ThreadPoolBuilder::new().num_threads(22).build_global().unwrap();
+    
+    let layer = get_or_create(depth);
+    res.par_iter_mut().enumerate()
+      .for_each(|(i, r)| *r = layer.hash(lon[i], lat[i]));
+}
+
 /// We do not return an array of LonLat not to have to explicitly call a function
 /// to free the memory on the Python side.
 #[no_mangle]

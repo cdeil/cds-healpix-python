@@ -22,4 +22,6 @@ crate-type = ["cdylib"]
 [dependencies]
 # The cdshealpix rust crate
 cdshealpix = { git = 'https://github.com/cds-astro/cds-healpix-rust', branch = 'master' }
+# Mutli-threading library
 rayon = "1.0"
+
