@@ -16,7 +16,7 @@ def _check_ipixels(data, depth):
         raise ValueError("The input HEALPix cells contains value out of [0, {0}[".format(npix))
 
 
-def lonlat_to_healpix(lon, lat, depth):
+def lonlat_to_healpix(lon, lat, depth, parallel=False):
     """Get the HEALPix indexes that contains specific sky coordinates
 
     The depth of the returned HEALPix cell indexes must be specified. This 
@@ -31,6 +31,8 @@ def lonlat_to_healpix(lon, lat, depth):
         The latitudes of the sky coordinates.
     depth : int
         The depth of the returned HEALPix cell indexes.
+    parallel : bool, optional
+        Enable parallelization. False by default.
 
     Returns
     -------
@@ -64,17 +66,30 @@ def lonlat_to_healpix(lon, lat, depth):
     # Allocation of the array containing the resulting ipixels
     ipixels = np.zeros(num_ipixels, dtype=np.uint64)
 
-    lib.hpx_hash_lonlat(
-        # depth
-        depth,
-        # num of ipixels
-        num_ipixels,
-        # lon, lat
-        ffi.cast("const double*", lon.ctypes.data),
-        ffi.cast("const double*", lat.ctypes.data),
-        # result
-        ffi.cast("uint64_t*", ipixels.ctypes.data)
-    )
+    if parallel:
+        lib.hpx_par_hash_lonlat(
+            # depth
+            depth,
+            # num of ipixels
+            num_ipixels,
+            # lon, lat
+            ffi.cast("const double*", lon.ctypes.data),
+            ffi.cast("const double*", lat.ctypes.data),
+            # result
+            ffi.cast("uint64_t*", ipixels.ctypes.data)
+        )
+    else:
+        lib.hpx_hash_lonlat(
+            # depth
+            depth,
+            # num of ipixels
+            num_ipixels,
+            # lon, lat
+            ffi.cast("const double*", lon.ctypes.data),
+            ffi.cast("const double*", lat.ctypes.data),
+            # result
+            ffi.cast("uint64_t*", ipixels.ctypes.data)
+        )
 
     return ipixels
 

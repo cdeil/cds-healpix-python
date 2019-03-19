@@ -24,6 +24,18 @@ def test_lonlat_to_healpix():
     npix = 12 * 4**(depth)
     assert(((ipixels >= 0) & (ipixels < npix)).all())
 
+def test_lonlat_to_healpix_par():
+    size = 10000
+    depth = 12
+    lon = np.random.rand(size) * 360 * u.deg
+    lat = (np.random.rand(size) * 178 - 89) * u.deg
+
+    ipixels_par = lonlat_to_healpix(lon=lon, lat=lat, depth=depth, parallel=True)
+    ipixels = lonlat_to_healpix(lon=lon, lat=lat, depth=depth)
+
+    npix = 12 * 4**(depth)
+    assert((ipixels == ipixels_par).all())
+
 def test_healpix_to_lonlat():
     size = 10000
     depth = 12

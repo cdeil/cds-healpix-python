@@ -12,7 +12,7 @@ from ..healpix import lonlat_to_healpix, \
 
 @pytest.mark.benchmark(group="lonlat_to_healpix")
 def test_lonlat_to_healpix(benchmark):
-    size = 10000
+    size = 100000
     depth = 12
     lon = np.random.rand(size) * 360 * u.deg
     lat = (np.random.rand(size) * 178 - 89) * u.deg
@@ -20,8 +20,18 @@ def test_lonlat_to_healpix(benchmark):
     ipixels = benchmark(lonlat_to_healpix, lon=lon, lat=lat, depth=depth)
 
 @pytest.mark.benchmark(group="lonlat_to_healpix")
+def test_lonlat_to_healpix_par(benchmark):
+    size = 100000
+    depth = 12
+    lon = np.random.rand(size) * 360 * u.deg
+    lat = (np.random.rand(size) * 178 - 89) * u.deg
+
+    ipixels = benchmark(lonlat_to_healpix, lon=lon, lat=lat, depth=depth, parallel=True)
+
+
+@pytest.mark.benchmark(group="lonlat_to_healpix")
 def test_lonlat_to_healpix_astropy(benchmark):
-    size = 10000
+    size = 100000
     depth = 12
     nside = 1 << depth
     lon = np.random.rand(size) * 360 * u.deg
