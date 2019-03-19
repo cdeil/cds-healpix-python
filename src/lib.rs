@@ -1,4 +1,5 @@
 extern crate cdshealpix;
+extern crate rayon;
 
 // use cdshealpix::proj;
 use cdshealpix::compass_point::MainWind;
@@ -11,6 +12,8 @@ use cdshealpix::nested::{
     elliptical_cone_coverage_custom,
     polygon_coverage,
 };
+
+use rayon::prelude::*;
 
 // Build
 // see: https://github.com/getsentry/milksnake
