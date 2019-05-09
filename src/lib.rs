@@ -248,7 +248,7 @@ fn cdshealpix(_py: Python, m: &PyModule) -> PyResult<()> {
             fully_covered.into_pyarray(py).to_owned())
         }
     }
-
+/*
     #[pyfn(m, "external_edges_cells")]
     fn external_edges_cells(_py: Python,
         depth: u8,
@@ -302,7 +302,7 @@ fn cdshealpix(_py: Python, m: &PyModule) -> PyResult<()> {
 
             Ok(())
         }
-
+*/
     Ok(())
 }
 
