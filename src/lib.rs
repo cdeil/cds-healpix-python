@@ -299,7 +299,7 @@ fn cdshealpix(_py: Python, m: &PyModule) -> PyResult<()> {
                     e[offset + i] = sw_edge[i];
                 }
             });
-        
+
             Ok(())
         }
 
