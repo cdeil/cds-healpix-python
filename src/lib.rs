@@ -273,32 +273,41 @@ fn cdshealpix(_py: Python, m: &PyModule) -> PyResult<()> {
                 c[1] = to_i64(external_edges.get_corner(&Cardinal::E));
                 c[2] = to_i64(external_edges.get_corner(&Cardinal::N));
                 c[3] = to_i64(external_edges.get_corner(&Cardinal::W));
-                
-                let num_cells_per_edge = 1 << delta_depth;
+
+                println!("{}", e.len());
+
+                let num_cells_per_edge = 2_i32.pow(delta_depth as u32) as usize;
                 let mut offset = 0;
+                println!("{}", num_cells_per_edge);
                 // SE
                 let se_edge = external_edges.get_edge(&Ordinal::SE);
                 for i in 0..num_cells_per_edge {
                     e[offset + i] = se_edge[i];
+                    println!("{}", offset+i);
                 }
                 offset += num_cells_per_edge;
                 // NE
                 let ne_edge = external_edges.get_edge(&Ordinal::NE);
                 for i in 0..num_cells_per_edge {
                     e[offset + i] = ne_edge[i];
+                    println!("{}", offset+i);
                 }
                 offset += num_cells_per_edge;
                 // NW
                 let nw_edge = external_edges.get_edge(&Ordinal::NW);
                 for i in 0..num_cells_per_edge {
                     e[offset + i] = nw_edge[i];
+                    println!("{}", offset+i);
                 }
                 offset += num_cells_per_edge;
                 // SW
                 let sw_edge = external_edges.get_edge(&Ordinal::SW);
                 for i in 0..num_cells_per_edge {
                     e[offset + i] = sw_edge[i];
+                    println!("{}", offset+i);
                 }
+
+                println!("{}", e);
             });
 
         Ok(())

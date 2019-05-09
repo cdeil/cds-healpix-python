@@ -15,5 +15,5 @@ export PATH="$HOME/.cargo/bin:$PATH"
 $PYTHON setup.py build_rust
 # Move the dynamic lib to the python package folder
 find build/ -name "*.so" -type f -exec cp {} ./cdshealpix \;
-$PYTHON -m pytest -v cdshealpix/tests/test_healpix.py
+$PYTHON -m pytest -v -s cdshealpix/tests/test_healpix.py
 

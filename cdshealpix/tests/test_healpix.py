@@ -163,7 +163,6 @@ def test_elliptical_cone_search():
     assert(((depth >= 0) & (depth <= max_depth)).all())
     assert(((ipix >= 0) & (ipix < npix)).all())
 
-"""
 @pytest.mark.parametrize("depth,ipix,expected_border_cells,expected_corner_cells", [
     (0, 0, np.array([90, 91, 94, 95, 26, 27, 30, 31, 53, 55, 61, 63, 69, 71, 77, 79]), np.array([143, -1, 47, -1])),
     (27, 0, np.array(
@@ -176,4 +175,3 @@ def test_external_edges_cells(depth, ipix, expected_border_cells, expected_corne
     ipix_border_cells, ipix_corner_cells = external_edges_cells(ipix, depth, delta_depth)
     assert((expected_border_cells == ipix_border_cells).all())
     assert((expected_corner_cells == ipix_corner_cells).all())
-"""
