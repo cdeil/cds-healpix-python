@@ -27,6 +27,61 @@ use healpix::compass_point::{MainWind, Cardinal, Ordinal};
 
 #[pymodule]
 fn cdshealpix(_py: Python, m: &PyModule) -> PyResult<()> {
+    #[pyfn(m, "external_edges_cells")]
+    fn external_edges_cells(_py: Python,
+        depth: u8,
+        delta_depth: u8,
+        ipix: &PyArrayDyn<u64>,
+        corners: &PyArrayDyn<i64>,
+        edges: &PyArrayDyn<u64>)
+    -> PyResult<()> {
+        let ipix = ipix.as_array();
+
+        let mut corners = corners.as_array_mut();
+        let mut edges = edges.as_array_mut();
+
+        let layer = healpix::nested::get_or_create(depth);
+        Zip::from(corners.genrows_mut())
+            .and(edges.genrows_mut())
+            .and(&ipix)
+            .par_apply(|mut c, mut e, &p| {
+                let external_edges = layer.external_edge_struct(p, delta_depth);
+
+                c[0] = to_i64(external_edges.get_corner(&Cardinal::S));
+                c[1] = to_i64(external_edges.get_corner(&Cardinal::E));
+                c[2] = to_i64(external_edges.get_corner(&Cardinal::N));
+                c[3] = to_i64(external_edges.get_corner(&Cardinal::W));
+
+                let num_cells_per_edge = (1 << delta_depth) as usize;
+                let mut offset = 0;
+                // SE
+                let se_edge = external_edges.get_edge(&Ordinal::SE);
+                for i in 0..num_cells_per_edge {
+                    e[offset + i] = se_edge[i];
+                }
+                offset += num_cells_per_edge;
+                // NE
+                let ne_edge = external_edges.get_edge(&Ordinal::NE);
+                for i in 0..num_cells_per_edge {
+                    e[offset + i] = ne_edge[i];
+                }
+                offset += num_cells_per_edge;
+                // NW
+                let nw_edge = external_edges.get_edge(&Ordinal::NW);
+                for i in 0..num_cells_per_edge {
+                    e[offset + i] = nw_edge[i];
+                }
+                offset += num_cells_per_edge;
+                // SW
+                let sw_edge = external_edges.get_edge(&Ordinal::SW);
+                for i in 0..num_cells_per_edge {
+                    e[offset + i] = sw_edge[i];
+                }
+            });
+
+        Ok(())
+    }
+
     /// wrapper of `lonlat_to_healpix`
     #[pyfn(m, "lonlat_to_healpix")]
     fn lonlat_to_healpix(_py: Python,
@@ -247,70 +302,6 @@ fn cdshealpix(_py: Python, m: &PyModule) -> PyResult<()> {
             depth.into_pyarray(py).to_owned(),
             fully_covered.into_pyarray(py).to_owned())
         }
-    }
-
-    #[pyfn(m, "external_edges_cells")]
-    fn external_edges_cells(_py: Python,
-        depth: u8,
-        delta_depth: u8,
-        ipix: &PyArrayDyn<u64>,
-        corners: &PyArrayDyn<i64>,
-        edges: &PyArrayDyn<u64>)
-    -> PyResult<()> {
-        let ipix = ipix.as_array();
-
-        let mut corners = corners.as_array_mut();
-        let mut edges = edges.as_array_mut();
-
-        let layer = healpix::nested::get_or_create(depth);
-        Zip::from(corners.genrows_mut())
-            .and(edges.genrows_mut())
-            .and(&ipix)
-            .par_apply(|mut c, mut e, &p| {
-                let external_edges = layer.external_edge_struct(p, delta_depth);
-
-                c[0] = to_i64(external_edges.get_corner(&Cardinal::S));
-                c[1] = to_i64(external_edges.get_corner(&Cardinal::E));
-                c[2] = to_i64(external_edges.get_corner(&Cardinal::N));
-                c[3] = to_i64(external_edges.get_corner(&Cardinal::W));
-
-                println!("{}", e.len());
-
-                let num_cells_per_edge = 2_i32.pow(delta_depth as u32) as usize;
-                let mut offset = 0;
-                println!("{}", num_cells_per_edge);
-                // SE
-                let se_edge = external_edges.get_edge(&Ordinal::SE);
-                for i in 0..num_cells_per_edge {
-                    e[offset + i] = se_edge[i];
-                    println!("{}", offset+i);
-                }
-                offset += num_cells_per_edge;
-                // NE
-                let ne_edge = external_edges.get_edge(&Ordinal::NE);
-                for i in 0..num_cells_per_edge {
-                    e[offset + i] = ne_edge[i];
-                    println!("{}", offset+i);
-                }
-                offset += num_cells_per_edge;
-                // NW
-                let nw_edge = external_edges.get_edge(&Ordinal::NW);
-                for i in 0..num_cells_per_edge {
-                    e[offset + i] = nw_edge[i];
-                    println!("{}", offset+i);
-                }
-                offset += num_cells_per_edge;
-                // SW
-                let sw_edge = external_edges.get_edge(&Ordinal::SW);
-                for i in 0..num_cells_per_edge {
-                    e[offset + i] = sw_edge[i];
-                    println!("{}", offset+i);
-                }
-
-                println!("{}", e);
-            });
-
-        Ok(())
     }
 
     Ok(())
