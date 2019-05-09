@@ -266,7 +266,7 @@ fn cdshealpix(_py: Python, m: &PyModule) -> PyResult<()> {
         Zip::from(corners.genrows_mut())
             .and(edges.genrows_mut())
             .and(&ipix)
-            .par_apply(|mut c, mut e, &p| {
+            .apply(|mut c, mut e, &p| {
                 let external_edges = layer.external_edge_struct(p, delta_depth);
 
                 c[0] = to_i64(external_edges.get_corner(&Cardinal::S));
