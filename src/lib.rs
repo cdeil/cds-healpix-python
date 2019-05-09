@@ -274,7 +274,7 @@ fn cdshealpix(_py: Python, m: &PyModule) -> PyResult<()> {
                 c[2] = to_i64(external_edges.get_corner(&Cardinal::N));
                 c[3] = to_i64(external_edges.get_corner(&Cardinal::W));
 
-                println!("{}", e.len());
+                println!("");
 
                 let num_cells_per_edge = 2_i32.pow(delta_depth as u32) as usize;
                 let mut offset = 0;
