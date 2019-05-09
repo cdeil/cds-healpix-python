@@ -255,7 +255,7 @@ fn cdshealpix(_py: Python, m: &PyModule) -> PyResult<()> {
         delta_depth: u8,
         ipix: &PyArrayDyn<u64>,
         corners: &PyArrayDyn<i64>,
-        edges: &PyArrayDyn<u64>) {
+        edges: &PyArrayDyn<u64>) -> PyResult<()> {
         let ipix = ipix.as_array();
 
         let mut corners = corners.as_array_mut();
@@ -299,6 +299,8 @@ fn cdshealpix(_py: Python, m: &PyModule) -> PyResult<()> {
                     e[offset + i] = sw_edge[i];
                 }
             });
+        
+            Ok(())
         }
 
     Ok(())
