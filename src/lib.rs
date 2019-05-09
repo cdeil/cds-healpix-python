@@ -250,7 +250,7 @@ fn cdshealpix(_py: Python, m: &PyModule) -> PyResult<()> {
     }
 
     #[pyfn(m, "external_edges_cells")]
-    fn external_edges_cells(
+    fn external_edges_cells(_py: Python,
         depth: u8,
         delta_depth: u8,
         ipix: &PyArrayDyn<u64>,
