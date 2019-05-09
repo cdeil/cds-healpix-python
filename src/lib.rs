@@ -248,14 +248,15 @@ fn cdshealpix(_py: Python, m: &PyModule) -> PyResult<()> {
             fully_covered.into_pyarray(py).to_owned())
         }
     }
-/*
+
     #[pyfn(m, "external_edges_cells")]
     fn external_edges_cells(_py: Python,
         depth: u8,
         delta_depth: u8,
         ipix: &PyArrayDyn<u64>,
         corners: &PyArrayDyn<i64>,
-        edges: &PyArrayDyn<u64>) -> PyResult<()> {
+        edges: &PyArrayDyn<u64>)
+    -> PyResult<()> {
         let ipix = ipix.as_array();
 
         let mut corners = corners.as_array_mut();
@@ -272,7 +273,7 @@ fn cdshealpix(_py: Python, m: &PyModule) -> PyResult<()> {
                 c[1] = to_i64(external_edges.get_corner(&Cardinal::E));
                 c[2] = to_i64(external_edges.get_corner(&Cardinal::N));
                 c[3] = to_i64(external_edges.get_corner(&Cardinal::W));
-
+                /*
                 let num_cells_per_edge = 1 << delta_depth;
                 let mut offset = 0;
                 // SE
@@ -298,11 +299,12 @@ fn cdshealpix(_py: Python, m: &PyModule) -> PyResult<()> {
                 for i in 0..num_cells_per_edge {
                     e[offset + i] = sw_edge[i];
                 }
+                */
             });
 
-            Ok(())
-        }
-*/
+        Ok(())
+    }
+
     Ok(())
 }
 
